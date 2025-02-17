@@ -10,7 +10,6 @@ while (true) {
 
     //Handle invalid commands
     string? Command = Console.ReadLine();
+    if(Command == "exit 0") { break; }
     Console.WriteLine($"{Command}: command not found");
-
-
 }
