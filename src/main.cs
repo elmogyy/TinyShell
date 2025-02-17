@@ -9,7 +9,13 @@ while (true) {
     //Console.ReadLine();
 
     //Handle invalid commands
-    string? Command = Console.ReadLine();
-    if(Command == "exit 0") { break; }
-    Console.WriteLine($"{Command}: command not found");
+    string? command = Console.ReadLine();
+    if(command == "exit 0") { Environment.Exit(0); }
+    /*if (command.StartsWith("exit"))
+    {
+        var cmdArgs = command.Split(' ');
+        Environment.Exit(int.Parse(cmdArgs[1]));
+    }*/
+    Console.WriteLine($"{command}: command not found");
+   
 }
