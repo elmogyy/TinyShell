@@ -1,12 +1,16 @@
 using System.Net;
 using System.Net.Sockets;
 
-// Uncomment this line to pass the first stage
- Console.Write("$ ");
+while (true) {
+    // Uncomment this line to pass the first stage
+    Console.Write("$ ");
 
-// Wait for user input
-//Console.ReadLine();
+    // Wait for user input
+    //Console.ReadLine();
 
-//Handle invalid commands
-string? Command = Console.ReadLine();
-Console.WriteLine($"{Command}: command not found");
+    //Handle invalid commands
+    string? Command = Console.ReadLine();
+    Console.WriteLine($"{Command}: command not found");
+
+
+}
