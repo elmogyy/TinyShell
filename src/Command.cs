@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,7 +49,8 @@ namespace codecrafters_shell.src
                     }
                     else
                     {
-                        goto default;
+                        Console.WriteLine($"{command}: command not found");
+                        break;
                     }
                 case "echo":
                     echo(arguments);
@@ -56,10 +58,30 @@ namespace codecrafters_shell.src
                 case "type":
                     type(arguments);
                     break;
-                default:
-                    Console.WriteLine($"{command}: command not found");
+                case "custom_exe_1234":
+                    string exe = type(new string[] { command });
+                    if (exe != "")
+                    {
+                        Process process = new Process();
+                        process.StartInfo.FileName = exe;
+                        process.StartInfo.Arguments = string.Join(" ", arguments);
+                        process.Start();
+                    }
                     break;
 
+                default:
+                    /*string exe = type(new string[] { command });
+                    if ( exe != "")
+                    {
+                        Process process = new Process();
+                        process.StartInfo.FileName = exe;
+                        process.StartInfo.Arguments = string.Join(" ", arguments);
+                        process.Start();
+                        break;
+
+                    }*/
+                    Console.WriteLine($"{command}: command not found");
+                    break;        
             }
         }
 
@@ -72,12 +94,13 @@ namespace codecrafters_shell.src
             }
             Console.WriteLine();
         }
-        static private void type(string[] arguments)
+        static private string type(string[] arguments)
         {
             bool exists = Enum.IsDefined(typeof(CommandType), arguments[0]);
             if (exists)
             {
                 Console.WriteLine($"{arguments[0]} is a shell builtin");
+                return arguments[0];
 
             }
             else 
@@ -90,10 +113,11 @@ namespace codecrafters_shell.src
                     if (File.Exists(exe_path))
                     {
                         Console.WriteLine($"{arguments[0]} is {exe_path}");
-                        return;
+                        return exe_path;
                     }
                 }
                 Console.WriteLine($"{arguments[0]}: not found");
+                return "";
             }
         }
 

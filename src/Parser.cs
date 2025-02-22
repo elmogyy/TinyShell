@@ -18,7 +18,6 @@ namespace codecrafters_shell.src
                 string[] inputs = user_input.Split(" ");
                 command = inputs[0];
                 arguments = inputs.Skip(1).ToArray();
-                
             }
         }
     }
