@@ -1,3 +1,4 @@
+using codecrafters_shell.src;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -8,8 +9,16 @@ while (true) {
 
     // Wait for user input
     //Console.ReadLine();
+    string? user_input = Console.ReadLine();
+    string command;
+    string[] arguments;
+    Parser.Parse(user_input, out command, out arguments);
+    CommandHandler.Execute(command, arguments);
 
-    string? command = Console.ReadLine();
+
+
+
+    /*string? command = Console.ReadLine();
     if (command != null)
     {
         string[] cmdArgs = command.Split(' ');
@@ -36,17 +45,17 @@ while (true) {
                     break;
                 }
         }
-    }
-   /* if (command == "") { Environment.Exit(0); }
-    if (command.StartsWith("exit"))
-    {
-        var cmdArgs = command.Split(' ');
-        Environment.Exit(int.Parse(cmdArgs[1]));
-    }
-    else if (command.StartsWith("echo"))
-    {
+    }*/
+    /* if (command == "") { Environment.Exit(0); }
+     if (command.StartsWith("exit"))
+     {
+         var cmdArgs = command.Split(' ');
+         Environment.Exit(int.Parse(cmdArgs[1]));
+     }
+     else if (command.StartsWith("echo"))
+     {
 
-    }
-    Console.WriteLine($"{command}: command not found");*/
-   
+     }
+     Console.WriteLine($"{command}: command not found");*/
+
 }
