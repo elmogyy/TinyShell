@@ -44,7 +44,7 @@ namespace codecrafters_shell.src
                 string executablePath = GetExecutablePath(command);
                 if (!string.IsNullOrEmpty(executablePath))
                 {
-                    RunExecutableFile(executablePath, arguments);
+                    RunExecutableFile(command,executablePath, arguments);
                 }
                 else
                 {
@@ -78,11 +78,11 @@ namespace codecrafters_shell.src
                     break;   
             }
         }
-        static public void RunExecutableFile(string executablePath, string[] arguments)
+        static public void RunExecutableFile(string command, string executablePath, string[] arguments)
         {
             Process process = new Process();
             process.StartInfo.FileName = executablePath;
-            process.StartInfo.Arguments = string.Join(" ", arguments);
+            process.StartInfo.Arguments = command + string.Join(" ",arguments);
             process.Start();
         }
         static private void echo(string[] arguments)
