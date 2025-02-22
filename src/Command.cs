@@ -83,7 +83,7 @@ namespace codecrafters_shell.src
             else 
             {
                 string? pathVariable = Environment.GetEnvironmentVariable("PATH");
-                string[] paths = pathVariable!= null ? pathVariable.Split(';'): Array.Empty<string>();
+                string[] paths = pathVariable!= null ? pathVariable.Split(':'): Array.Empty<string>();
                 foreach (string path in paths)
                 {
                     string exe_path = Path.Join(path, arguments[0]);
