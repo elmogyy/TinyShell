@@ -81,8 +81,8 @@ namespace codecrafters_shell.src
         static public void RunExecutableFile(string command, string executablePath, string[] arguments)
         {
             Process process = new Process();
-            process.StartInfo.FileName = executablePath;
-            process.StartInfo.Arguments = command + string.Join(" ",arguments);
+            process.StartInfo.FileName = command;
+            process.StartInfo.Arguments = string.Join(" ",arguments);
             process.Start();
         }
         static private void echo(string[] arguments)
@@ -120,7 +120,7 @@ namespace codecrafters_shell.src
         static private string GetExecutablePath(string command)
         {
             string? pathVariable = Environment.GetEnvironmentVariable("PATH");
-            string[] paths = pathVariable != null ? pathVariable.Split(':') : Array.Empty<string>();
+            string[] paths = pathVariable != null ? pathVariable.Split(';') : Array.Empty<string>();
             foreach (string path in paths)
             {
                 string executablePath = Path.Join(path, command);
