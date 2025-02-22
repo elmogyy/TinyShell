@@ -82,6 +82,17 @@ namespace codecrafters_shell.src
             }
             else 
             {
+                string? pathVariable = Environment.GetEnvironmentVariable("PATH");
+                string[] paths = pathVariable!= null ? pathVariable.Split(';'): Array.Empty<string>();
+                foreach (string path in paths)
+                {
+                    string exe_path = Path.Join(path, arguments[0]);
+                    if (File.Exists(exe_path))
+                    {
+                        Console.WriteLine($"{arguments[0]} is {exe_path}");
+                        return;
+                    }
+                }
                 Console.WriteLine($"{arguments[0]}: not found");
             }
         }
