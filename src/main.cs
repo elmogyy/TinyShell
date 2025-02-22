@@ -13,7 +13,7 @@ while (true) {
     string command;
     string[] arguments;
     Parser.Parse(user_input, out command, out arguments);
-    CommandHandler.Execute(command, arguments);
+    CommandHandler.RunShellOrExecutable(command, arguments);
 
 
 

@@ -33,11 +33,26 @@ namespace codecrafters_shell.src
             Commands[(int)CommandType.echo] = new CommandData(CommandType.echo.ToString(), "description not exist" , 1);
         }
     }
-
-
     static class CommandHandler
     {
-        static public void Execute(string command, string[] arguments)
+        static public void RunShellOrExecutable(string command, string[] arguments)
+        {
+            
+            if (IsBuiltInShellCommand(command)) { RunShellBuiltInCommand(command, arguments); }
+            else
+            {
+                string executablePath = GetExecutablePath(command);
+                if (!string.IsNullOrEmpty(executablePath))
+                {
+                    RunExecutableFile(executablePath, arguments);
+                }
+                else
+                {
+                    Console.WriteLine($"{command}: command not found");
+                }
+            }
+        }
+        static public void RunShellBuiltInCommand(string command, string[] arguments)
         {
             switch (command)
             {
@@ -58,33 +73,18 @@ namespace codecrafters_shell.src
                 case "type":
                     type(arguments);
                     break;
-                case "custom_exe_1234":
-                    string exe = type(new string[] { command });
-                    if (exe != "")
-                    {
-                        Process process = new Process();
-                        process.StartInfo.FileName = exe;
-                        process.StartInfo.Arguments = string.Join(" ", arguments);
-                        process.Start();
-                    }
-                    break;
-
                 default:
-                    /*string exe = type(new string[] { command });
-                    if ( exe != "")
-                    {
-                        Process process = new Process();
-                        process.StartInfo.FileName = exe;
-                        process.StartInfo.Arguments = string.Join(" ", arguments);
-                        process.Start();
-                        break;
-
-                    }*/
                     Console.WriteLine($"{command}: command not found");
-                    break;        
+                    break;   
             }
         }
-
+        static public void RunExecutableFile(string executablePath, string[] arguments)
+        {
+            Process process = new Process();
+            process.StartInfo.FileName = executablePath;
+            process.StartInfo.Arguments = string.Join(" ", arguments);
+            process.Start();
+        }
         static private void echo(string[] arguments)
         {
             for (int i = 0; i < arguments.Length; i++)
@@ -94,37 +94,43 @@ namespace codecrafters_shell.src
             }
             Console.WriteLine();
         }
-        static private string type(string[] arguments)
+        static private void type(string[] arguments)
         {
-            bool exists = Enum.IsDefined(typeof(CommandType), arguments[0]);
-            if (exists)
+            if (IsBuiltInShellCommand(arguments[0]))
             {
                 Console.WriteLine($"{arguments[0]} is a shell builtin");
-                return arguments[0];
-
             }
             else 
             {
-                string? pathVariable = Environment.GetEnvironmentVariable("PATH");
-                string[] paths = pathVariable!= null ? pathVariable.Split(':'): Array.Empty<string>();
-                foreach (string path in paths)
+                string executablePath = GetExecutablePath(arguments[0]);
+                if (!string.IsNullOrEmpty(executablePath))
                 {
-                    string exe_path = Path.Join(path, arguments[0]);
-                    if (File.Exists(exe_path))
-                    {
-                        Console.WriteLine($"{arguments[0]} is {exe_path}");
-                        return exe_path;
-                    }
+                    Console.WriteLine($"{arguments[0]}: is {executablePath}");
                 }
-                Console.WriteLine($"{arguments[0]}: not found");
-                return "";
+                else
+                {
+                    Console.WriteLine($"{arguments[0]}: not found");
+                }
             }
         }
-
-
+        static private bool IsBuiltInShellCommand(string command)
+        {
+           return Enum.IsDefined(typeof(CommandType), command);
+        }
+        static private string GetExecutablePath(string command)
+        {
+            string? pathVariable = Environment.GetEnvironmentVariable("PATH");
+            string[] paths = pathVariable != null ? pathVariable.Split(':') : Array.Empty<string>();
+            foreach (string path in paths)
+            {
+                string executablePath = Path.Join(path, command);
+                if (File.Exists(executablePath))
+                {
+                    return executablePath;
+                }
+            }
+            return "";
+        }
 
     }
-
-
-
 }
