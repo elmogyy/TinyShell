@@ -105,7 +105,7 @@ namespace codecrafters_shell.src
                 string executablePath = GetExecutablePath(arguments[0]);
                 if (!string.IsNullOrEmpty(executablePath))
                 {
-                    Console.WriteLine($"{arguments[0]}: is {executablePath}");
+                    Console.WriteLine($"{arguments[0]} is {executablePath}");
                 }
                 else
                 {
