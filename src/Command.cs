@@ -129,6 +129,7 @@ namespace codecrafters_shell.src
         {
             try
             {
+                if(arguments[0] == "~") { arguments[0] = Environment.GetEnvironmentVariable("HOME")??"";}
                 Directory.SetCurrentDirectory(arguments[0]);
             }
             catch (Exception)
