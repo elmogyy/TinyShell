@@ -11,7 +11,8 @@ namespace codecrafters_shell.src
         exit,
         echo,
         type,
-        pwd
+        pwd,
+        cd
     }
     readonly struct CommandData
     {
@@ -77,6 +78,9 @@ namespace codecrafters_shell.src
                 case "pwd":
                     pwd();
                     break;
+                case "cd":
+                    cd(arguments);
+                    break;
                 default:
                     Console.WriteLine($"{command}: command not found");
                     break;   
@@ -120,7 +124,17 @@ namespace codecrafters_shell.src
         static private void pwd()
         {
             Console.WriteLine(Directory.GetCurrentDirectory());
-
+        }
+        static private void cd(string[] arguments)
+        {
+            try
+            {
+                Directory.SetCurrentDirectory(arguments[0]);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"cd: {arguments[0]}: No such file or directory");
+            }
         }
         static private bool IsBuiltInShellCommand(string command)
         {
