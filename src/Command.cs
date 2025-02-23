@@ -120,7 +120,7 @@ namespace codecrafters_shell.src
         static private string GetExecutablePath(string command)
         {
             string? pathVariable = Environment.GetEnvironmentVariable("PATH");
-            string[] paths = pathVariable != null ? pathVariable.Split(';') : Array.Empty<string>();
+            string[] paths = pathVariable != null ? pathVariable.Split(':') : Array.Empty<string>();
             foreach (string path in paths)
             {
                 string executablePath = Path.Join(path, command);
