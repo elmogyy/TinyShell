@@ -21,15 +21,14 @@ namespace codecrafters_shell.src
                     command = commandLine.Substring(0, index);
                     string fullArgument = commandLine.Substring(index + 1);
                     fullArgument = fullArgument.Trim();
-                    fullArgument = Regex.Replace(fullArgument, @"\s+(?=(?:[^'""]*['""][^'""]*['""])*[^'""]*$)", " ");
+                    //fullArgument = Regex.Replace(fullArgument, @"\s+(?=(?:[^""']*([""'])(?:.*?\1)?)*[^""']*$)", " ");
                     //arguments = Regex.Split(fullArgument, @" (?=(?:[^']*'[^']*')*[^']*$)");
                     //arguments = fullArgument.Split('\'').Where(s => !string.IsNullOrEmpty(s)).ToArray();
                     //arguments = arguments.SelectMany(str => str.Split(' ').Where(s => !string.IsNullOrEmpty(s))).ToArray();
                     //arguments = arguments.SelectMany(str => str.Split(' ').Where(s => !string.IsNullOrEmpty(s))).ToArray();
                     string pattern = @"(?:""([^""]*)""|'([^']*)'|[^\s""']+)+";
                     arguments = Regex.Matches(fullArgument, pattern)
-                        .Select(m => m.Value.Trim('"', '\''))
-                        .ToArray();
+                           .Select(m => m.Value.Trim('\"', '\'').Replace("\'\'", "").Replace("\"\"", "")).ToArray();
                 }
                 else
                 {
