@@ -21,7 +21,7 @@ namespace codecrafters_shell.src
                     command = commandLine.Substring(0, index);
                     string fullArgument = commandLine.Substring(index + 1);
                     fullArgument = Regex.Replace(fullArgument, @"\s+(?=(?:[^']*'[^']*')*[^']*$)", " ");
-                    arguments = fullArgument.Split('\'').Where(s => !string.IsNullOrWhiteSpace(s)).ToArray();
+                    arguments = fullArgument.Split('\'');
                 }
                 else
                 {
