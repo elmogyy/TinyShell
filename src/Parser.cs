@@ -5,19 +5,31 @@ namespace codecrafters_shell.src
 {
     static class Parser
     {
-        public static void Parse(string? user_input, out string command, out string[] arguments)
+        public static void Parse(string? commandLine, out string command, out string[] arguments)
         {
-            if (string.IsNullOrEmpty(user_input))
+            if (string.IsNullOrEmpty(commandLine))
             {
                 command = string.Empty;
                 arguments = Array.Empty<string>();
             }
             else
             {
-                user_input = user_input.Trim();
-                string[] inputs = user_input.Split(" ");
+                commandLine = commandLine.Trim();
+                int index = commandLine.IndexOf(' ');
+                if (index != -1)
+                {
+                    command = commandLine.Substring(0, index);
+                    string fullArgument = commandLine.Substring(index + 1);
+                    arguments = fullArgument.Split('\'').Where(s => !string.IsNullOrWhiteSpace(s)).ToArray();
+                }
+                else
+                {
+                    command = commandLine;
+                    arguments = Array.Empty<string>();
+                }
+                /*string[] inputs = user_input.Split(" ");
                 command = inputs[0];
-                arguments = inputs.Skip(1).ToArray();
+                arguments = inputs.Skip(1).ToArray();*/
             }
         }
     }

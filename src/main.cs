@@ -9,10 +9,10 @@ while (true) {
 
     // Wait for user input
     //Console.ReadLine();
-    string? user_input = Console.ReadLine();
+    string? commandLine = Console.ReadLine();
     string command;
     string[] arguments;
-    Parser.Parse(user_input, out command, out arguments);
+    Parser.Parse(commandLine, out command, out arguments);
     CommandHandler.RunShellOrExecutable(command, arguments);
 
 

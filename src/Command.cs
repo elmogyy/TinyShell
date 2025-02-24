@@ -46,7 +46,7 @@ namespace codecrafters_shell.src
                 string executablePath = GetExecutablePath(command);
                 if (!string.IsNullOrEmpty(executablePath))
                 {
-                    RunExecutableFile(command,executablePath, arguments);
+                    RunExecutableFile(command, arguments);
                 }
                 else
                 {
@@ -59,7 +59,7 @@ namespace codecrafters_shell.src
             switch (command)
             {
                 case "exit":
-                    if (arguments.Length == 1 && arguments[0] == "0")
+                    if (arguments[0] == "0")
                     {
                         Environment.Exit(0);
                         break;
@@ -86,19 +86,19 @@ namespace codecrafters_shell.src
                     break;   
             }
         }
-        static public void RunExecutableFile(string command, string executablePath, string[] arguments)
+        static public void RunExecutableFile(string command, string[] arguments)
         {
             Process process = new Process();
             process.StartInfo.FileName = command;
-            process.StartInfo.Arguments = string.Join(" ",arguments);
+            process.StartInfo.Arguments = string.Join(" ", arguments);
             process.Start();
         }
         static private void echo(string[] arguments)
         {
+
             for (int i = 0; i < arguments.Length; i++)
             {
-                if (arguments[i] == "") Console.Write(" ");
-                else { Console.Write($"{arguments[i]} "); }
+                Console.Write($"{arguments[i]} ");
             }
             Console.WriteLine();
         }
@@ -129,7 +129,7 @@ namespace codecrafters_shell.src
         {
             try
             {
-                if(arguments[0] == "~") { arguments[0] = Environment.GetEnvironmentVariable("HOME")??"";}
+                if (arguments[0] == "~") { arguments[0] = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);}
                 Directory.SetCurrentDirectory(arguments[0]);
             }
             catch (Exception)
