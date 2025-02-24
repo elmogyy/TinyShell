@@ -98,7 +98,7 @@ namespace codecrafters_shell.src
         {
             for (int i = 0; i < arguments.Length; i++)
             {
-                Console.WriteLine($"{arguments[i]} ");
+                Console.Write($"{arguments[i]} ");
             }
             Console.WriteLine();
         }
