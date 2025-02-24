@@ -90,8 +90,9 @@ namespace codecrafters_shell.src
         {
             Process process = new Process();
             process.StartInfo.FileName = command;
-            process.StartInfo.Arguments = string.Join(" ", arguments.Select(arg => $"\"{arg}\""));
+            process.StartInfo.Arguments = string.Join(" ", arguments.Select(argument => $"\"{argument}\""));
             process.Start();
+            process.WaitForExit();
         }
         static private void echo(string[] arguments)
         {
