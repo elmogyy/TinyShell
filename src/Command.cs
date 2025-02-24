@@ -12,7 +12,7 @@ namespace codecrafters_shell.src
         echo,
         type,
         pwd,
-        cd
+        cd,
     }
     readonly struct CommandData
     {
@@ -95,10 +95,9 @@ namespace codecrafters_shell.src
         }
         static private void echo(string[] arguments)
         {
-
             for (int i = 0; i < arguments.Length; i++)
             {
-                Console.Write($"{arguments[i]}");
+                Console.Write($"{arguments[i]} ");
             }
             Console.WriteLine();
         }
