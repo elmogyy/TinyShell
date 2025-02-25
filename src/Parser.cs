@@ -82,7 +82,10 @@ namespace codecrafters_shell.src
                             currentArgument.Length--;
 
                         }*/
-                        arguments.Add(currentArgument.ToString());
+                        if (currentArgument.Length != 0)
+                        { 
+                            arguments.Add(currentArgument.ToString()); 
+                        }
                         currentArgument.Clear();
                         continue;
                     }
