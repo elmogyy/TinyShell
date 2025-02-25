@@ -46,13 +46,13 @@ namespace codecrafters_shell.src
                                     continue;
 
                                 }
-                                else if(nextChar == 'n')
+                                /*else if(nextChar == 'n')
                                 {
                                     currentArgument.Append(Environment.NewLine);
                                     i++;
                                     continue;
 
-                                }
+                                }*/
                                 /*else if(previousChar != '\\' && previousChar != '\"' && previousChar != '$')
                                 {
                                     currentArgument.Append(currentChar);
