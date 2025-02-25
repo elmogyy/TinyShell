@@ -24,42 +24,40 @@ namespace codecrafters_shell.src
                             char nextChar = argumentString[i + 1];
                             if (!inDoubleQuote)
                             {
-                                if(nextChar == '\'' || nextChar == '\"')
+                                if(nextChar == '\\' || nextChar == '\'' || nextChar == '\"')
                                 {
                                     currentArgument.Append(nextChar);
                                     i++;
-                                    continue;
                                 }
-                                else
+                                else if(nextChar == ' ')
                                 {
                                     currentArgument.Append(' ');
-                                    continue;   
-                                }
+                                    i++;
+                                }  
+                                continue;
                             }
                             else if(inDoubleQuote)
                             {
-                                char previousChar = argumentString[i - 1];
+                                //char previousChar = argumentString[i - 1];
                                 if (nextChar == '\\' || nextChar == '\"' || nextChar == '$')
                                 {
                                     currentArgument.Append(nextChar);
                                     i++;
                                     continue;
+
                                 }
                                 else if(nextChar == 'n')
                                 {
                                     currentArgument.Append(Environment.NewLine);
                                     i++;
                                     continue;
+
                                 }
-                                else if(previousChar != '\\' && previousChar != '\"' && previousChar != '$')
+                                /*else if(previousChar != '\\' && previousChar != '\"' && previousChar != '$')
                                 {
                                     currentArgument.Append(currentChar);
                                     continue;
-                                }
-                                else
-                                {
-                                    continue;
-                                }
+                                }*/
                             }
                         }
                         else
@@ -79,11 +77,11 @@ namespace codecrafters_shell.src
                     }
                     else if (currentChar == ' ' && !inSingleQuote && !inDoubleQuote)
                     {
-                        if (currentArgument.Length >= 1 && currentArgument[currentArgument.Length-1] == ' ')
+                        /*if (currentArgument.Length >= 1 && currentArgument[currentArgument.Length-1] == ' ')
                         {
                             currentArgument.Length--;
 
-                        }
+                        }*/
                         arguments.Add(currentArgument.ToString());
                         currentArgument.Clear();
                         continue;
