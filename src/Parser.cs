@@ -79,10 +79,14 @@ namespace codecrafters_shell.src
                     }
                     else if (currentChar == ' ' && !inSingleQuote && !inDoubleQuote)
                     {
+                        if (currentArgument.Length >= 1 && currentArgument[currentArgument.Length-1] == ' ')
+                        {
+                            currentArgument.Length--;
+
+                        }
                         arguments.Add(currentArgument.ToString());
                         currentArgument.Clear();
                         continue;
-
                     }
                     currentArgument.Append(currentChar);
                 }
