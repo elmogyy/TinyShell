@@ -90,7 +90,8 @@ namespace codecrafters_shell.src
         {
             Process process = new Process();
             process.StartInfo.FileName = command;
-            process.StartInfo.Arguments = string.Join(" ", arguments.Select(argument => $"\"{argument}\""));
+            process.StartInfo.Arguments = string.Join(" ", arguments);
+
             process.Start();
             process.WaitForExit();
         }
@@ -98,15 +99,17 @@ namespace codecrafters_shell.src
         {
             for (int i = 0; i < arguments.Length; i++)
             {
-                /*if (string.IsNullOrWhiteSpace(arguments[i])) 
+                if (string.IsNullOrWhiteSpace(arguments[i])) 
                  {
                      Console.Write($"{arguments[i]}"); 
                  }
                  else
                  {
                      Console.Write($"{arguments[i]} ");
-                 }*/
-                Console.Write($"{arguments[i]} ");
+                 }
+               //Console.Write($"{arguments[i]}");
+               // Console.Write(string.Join(" ", arguments));
+
             }
             Console.WriteLine();
         }
