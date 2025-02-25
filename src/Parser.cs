@@ -7,7 +7,7 @@ namespace codecrafters_shell.src
 {
     static class Parser
     {
-        static private List<string> ParseArgumentString(string argumentString)
+        static public List<string> ParseArgumentString(string argumentString)
         {
             List<string> arguments = new List<string>();
             StringBuilder currentArgument = new StringBuilder();
