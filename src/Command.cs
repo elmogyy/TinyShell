@@ -98,7 +98,14 @@ namespace codecrafters_shell.src
         {
             for (int i = 0; i < arguments.Length; i++)
             {
-                Console.Write($"{arguments[i]} ");
+               if (string.IsNullOrWhiteSpace(arguments[i])) 
+                {
+                    Console.Write($"{arguments[i]}"); 
+                }
+                else
+                {
+                    Console.Write($"{arguments[i]} ");
+                }
             }
             Console.WriteLine();
         }
