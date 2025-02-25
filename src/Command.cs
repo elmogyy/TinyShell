@@ -90,8 +90,7 @@ namespace codecrafters_shell.src
         {
             Process process = new Process();
             process.StartInfo.FileName = command;
-            process.StartInfo.Arguments = string.Join(" ", arguments.Select(argument => argument.Replace("\"", "\\\"")));
-
+            process.StartInfo.Arguments = string.Join(" ", arguments.Select(argument => argument.Replace("\"", "\\\"").Replace(" ", "\\\"")));
             process.Start();
             process.WaitForExit();
         }
