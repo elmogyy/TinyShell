@@ -104,7 +104,7 @@ namespace codecrafters_shell.src
 
         public static void Parse(string? commandLine, out string command, out string[] arguments)
         {
-            if (string.IsNullOrEmpty(commandLine))
+            if (string.IsNullOrWhiteSpace(commandLine))
             {
                 command = string.Empty;
                 arguments = Array.Empty<string>();
@@ -112,30 +112,34 @@ namespace codecrafters_shell.src
             else
             {
                 commandLine = commandLine.Trim();
-                int index = commandLine.IndexOf(' ');
-                if (index != -1)
-                {
-                    command = commandLine.Substring(0, index);
-                    string argumentString = commandLine.Substring(index + 1);
-                    //fullArgument = Regex.Replace(fullArgument, @"\s+(?=(?:[^""']*([""'])(?:.*?\1)?)*[^""']*$)", " ");
-                    //arguments = Regex.Split(fullArgument, @" (?=(?:[^']*'[^']*')*[^']*$)");
-                    //arguments = fullArgument.Split('\'').Where(s => !string.IsNullOrEmpty(s)).ToArray();
-                    //arguments = arguments.SelectMany(str => str.Split(' ').Where(s => !string.IsNullOrEmpty(s))).ToArray();
-                    //arguments = arguments.SelectMany(str => str.Split(' ').Where(s => !string.IsNullOrEmpty(s))).ToArray();
-                    /*string pattern = @"(?:""([^""]*)""|'([^']*)'|[^\s""']+)+";
-                    arguments = Regex.Matches(fullArgument, pattern)
-                           .Select(m => m.Value.Trim('\"', '\'').Replace("\'\'", "").Replace("\"\"", "")).ToArray();*/
-                     arguments = ParseArgumentString(argumentString).ToArray();
-                }
-                else
-                {
-                    command = commandLine;
-                    arguments = Array.Empty<string>();
-                }
+                arguments = ParseArgumentString(commandLine).ToArray();
+                command = arguments[0];
+                arguments = arguments.Skip(1).ToArray();
+            }
+                //int index = commandLine.IndexOf(' ');
+                //if (index != -1)
+                //{
+                //command = commandLine.Substring(0, index);
+                //command = ParseArgumentString(command).First();
+                //string argumentString = commandLine.Substring(index + 1);
+                //fullArgument = Regex.Replace(fullArgument, @"\s+(?=(?:[^""']*([""'])(?:.*?\1)?)*[^""']*$)", " ");
+                //arguments = Regex.Split(fullArgument, @" (?=(?:[^']*'[^']*')*[^']*$)");
+                //arguments = fullArgument.Split('\'').Where(s => !string.IsNullOrEmpty(s)).ToArray();
+                //arguments = arguments.SelectMany(str => str.Split(' ').Where(s => !string.IsNullOrEmpty(s))).ToArray();
+                //arguments = arguments.SelectMany(str => str.Split(' ').Where(s => !string.IsNullOrEmpty(s))).ToArray();
+                /*string pattern = @"(?:""([^""]*)""|'([^']*)'|[^\s""']+)+";
+                arguments = Regex.Matches(fullArgument, pattern)
+                       .Select(m => m.Value.Trim('\"', '\'').Replace("\'\'", "").Replace("\"\"", "")).ToArray();*/
+
+                // }
+                // else
+                //{
+                // command = commandLine;
+                //arguments = Array.Empty<string>();
+                //}
                 /*string[] inputs = user_input.Split(" ");
                 command = inputs[0];
-                arguments = inputs.Skip(1).ToArray();*/
-            }
+                arguments = inputs.Skip(1).ToArray();*/    
         }
     }
 }

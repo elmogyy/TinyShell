@@ -89,7 +89,6 @@ namespace codecrafters_shell.src
         static public void RunExecutableFile(string command, string[] arguments)
         {
             Process process = new Process();
-            command = Parser.ParseArgumentString(command).First();
             process.StartInfo.FileName = command;
             process.StartInfo.Arguments = string.Join(" ", arguments.Select(argument => $"\"{argument.Replace("\"", "\\\"")}\""));
             process.Start();
