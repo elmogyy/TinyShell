@@ -7,7 +7,7 @@ namespace codecrafters_shell.src
 {
     static class Parser
     {
-        static public List<string> ParseArgumentString(string argumentString)
+        static private List<string> ParseArgumentString(string argumentString)
         {
             List<string> arguments = new List<string>();
             StringBuilder currentArgument = new StringBuilder();
@@ -18,47 +18,26 @@ namespace codecrafters_shell.src
                 {
                     char currentChar= argumentString[i];
                     if (currentChar == '\\' && !inSingleQuote)
-                    {
+                    { 
                         if (i != argumentString.Length - 1)
                         {
                             char nextChar = argumentString[i + 1];
-                            if (!inDoubleQuote)
+                            if ((nextChar == '\\' || nextChar == '\'' || nextChar == '\"') && !inDoubleQuote)
                             {
-                                if(nextChar == '\\' || nextChar == '\'' || nextChar == '\"')
-                                {
-                                    currentArgument.Append(nextChar);
-                                    i++;
-                                }
-                                else if(nextChar == ' ')
-                                {
-                                    currentArgument.Append(' ');
-                                    i++;
-                                }  
-                                continue;
+                                currentArgument.Append(nextChar);
+                                i++;
                             }
-                            else if(inDoubleQuote)
+                            else if (nextChar == ' ' && !inDoubleQuote)
                             {
-                                //char previousChar = argumentString[i - 1];
-                                if (nextChar == '\\' || nextChar == '\"' || nextChar == '$')
-                                {
-                                    currentArgument.Append(nextChar);
-                                    i++;
-                                    continue;
-
-                                }
-                                /*else if(nextChar == 'n')
-                                {
-                                    currentArgument.Append(Environment.NewLine);
-                                    i++;
-                                    continue;
-
-                                }*/
-                                /*else if(previousChar != '\\' && previousChar != '\"' && previousChar != '$')
-                                {
-                                    currentArgument.Append(currentChar);
-                                    continue;
-                                }*/
+                                currentArgument.Append(' ');
+                                i++;
                             }
+                            else if ((nextChar == '\\' || nextChar == '\"' || nextChar == '$') && inDoubleQuote)
+                            {
+                                currentArgument.Append(nextChar);
+                                i++;
+                            }
+                            continue;
                         }
                         else
                         {
@@ -77,11 +56,6 @@ namespace codecrafters_shell.src
                     }
                     else if (currentChar == ' ' && !inSingleQuote && !inDoubleQuote)
                     {
-                        /*if (currentArgument.Length >= 1 && currentArgument[currentArgument.Length-1] == ' ')
-                        {
-                            currentArgument.Length--;
-
-                        }*/
                         if (currentArgument.Length != 0)
                         { 
                             arguments.Add(currentArgument.ToString()); 
@@ -93,7 +67,7 @@ namespace codecrafters_shell.src
                 }
                 if (!inSingleQuote && !inDoubleQuote && argumentString[argumentString.Length-1] != '\\') break;
                 Console.Write("> ");
-                argumentString = Console.ReadLine();
+                argumentString = Console.ReadLine()??" ";
             }
             if (currentArgument.Length > 0)
             {
@@ -101,7 +75,6 @@ namespace codecrafters_shell.src
             }
             return arguments;
         }
-
         public static void Parse(string? commandLine, out string command, out string[] arguments)
         {
             if (string.IsNullOrWhiteSpace(commandLine))
@@ -115,31 +88,7 @@ namespace codecrafters_shell.src
                 arguments = ParseArgumentString(commandLine).ToArray();
                 command = arguments[0];
                 arguments = arguments.Skip(1).ToArray();
-            }
-                //int index = commandLine.IndexOf(' ');
-                //if (index != -1)
-                //{
-                //command = commandLine.Substring(0, index);
-                //command = ParseArgumentString(command).First();
-                //string argumentString = commandLine.Substring(index + 1);
-                //fullArgument = Regex.Replace(fullArgument, @"\s+(?=(?:[^""']*([""'])(?:.*?\1)?)*[^""']*$)", " ");
-                //arguments = Regex.Split(fullArgument, @" (?=(?:[^']*'[^']*')*[^']*$)");
-                //arguments = fullArgument.Split('\'').Where(s => !string.IsNullOrEmpty(s)).ToArray();
-                //arguments = arguments.SelectMany(str => str.Split(' ').Where(s => !string.IsNullOrEmpty(s))).ToArray();
-                //arguments = arguments.SelectMany(str => str.Split(' ').Where(s => !string.IsNullOrEmpty(s))).ToArray();
-                /*string pattern = @"(?:""([^""]*)""|'([^']*)'|[^\s""']+)+";
-                arguments = Regex.Matches(fullArgument, pattern)
-                       .Select(m => m.Value.Trim('\"', '\'').Replace("\'\'", "").Replace("\"\"", "")).ToArray();*/
-
-                // }
-                // else
-                //{
-                // command = commandLine;
-                //arguments = Array.Empty<string>();
-                //}
-                /*string[] inputs = user_input.Split(" ");
-                command = inputs[0];
-                arguments = inputs.Skip(1).ToArray();*/    
+            }       
         }
     }
 }

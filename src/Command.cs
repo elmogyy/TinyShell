@@ -14,7 +14,7 @@ namespace codecrafters_shell.src
         pwd,
         cd,
     }
-    readonly struct CommandData
+    /*readonly struct CommandData
     {
         public string Name { get; }
         public string Description { get; }
@@ -34,7 +34,7 @@ namespace codecrafters_shell.src
             Commands[(int)CommandType.exit] = new CommandData(CommandType.exit.ToString(), "description not exist" ,1);
             Commands[(int)CommandType.echo] = new CommandData(CommandType.echo.ToString(), "description not exist" , 1);
         }
-    }
+    }*/
     static class CommandHandler
     {
         static public void RunShellOrExecutable(string command, string[] arguments)
@@ -59,16 +59,8 @@ namespace codecrafters_shell.src
             switch (command)
             {
                 case "exit":
-                    if (arguments[0] == "0")
-                    {
-                        Environment.Exit(0);
-                        break;
-                    }
-                    else
-                    {
-                        Console.WriteLine($"{command}: command not found");
-                        break;
-                    }
+                    exit(arguments);
+                    break;
                 case "echo":
                     echo(arguments);
                     break;
@@ -93,6 +85,13 @@ namespace codecrafters_shell.src
             process.StartInfo.Arguments = string.Join(" ", arguments.Select(argument => $"\"{argument.Replace("\"", "\\\"")}\""));
             process.Start();
             process.WaitForExit();
+        }
+        static private void exit(string[] arguments)
+        {
+            if (arguments[0] == "0")
+            {
+                Environment.Exit(0);
+            }
         }
         static private void echo(string[] arguments)
         {
