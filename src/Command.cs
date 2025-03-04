@@ -100,6 +100,7 @@ namespace codecrafters_shell.src
             finally
             {
                 process.WaitForExit();
+                process.Dispose();
             }
         }
         static private void exit(string[] arguments)
