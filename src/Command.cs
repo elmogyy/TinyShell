@@ -92,11 +92,14 @@ namespace codecrafters_shell.src
             {
                 process.Start();
                 Console.WriteLine(process.StandardOutput.ReadToEnd());
-                process.WaitForExit();
             }
             catch
             {
                 throw new Exception(process.StandardError.ReadToEnd());
+            }
+            finally
+            {
+                process.WaitForExit();
             }
         }
         static private void exit(string[] arguments)
