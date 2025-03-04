@@ -85,8 +85,19 @@ namespace codecrafters_shell.src
             Process process = new Process();
             process.StartInfo.FileName = command;
             process.StartInfo.Arguments = string.Join(" ", arguments.Select(argument => $"\"{argument.Replace("\"", "\\\"")}\""));
-            process.Start();
-            process.WaitForExit();
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
+            process.StartInfo.UseShellExecute = false;
+            try
+            {
+                process.Start();
+                Console.WriteLine(process.StandardOutput.ReadToEnd());
+                process.WaitForExit();
+            }
+            catch
+            {
+                throw new Exception(process.StandardError.ReadToEnd());
+            }
         }
         static private void exit(string[] arguments)
         {
