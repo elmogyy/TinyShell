@@ -50,7 +50,8 @@ namespace codecrafters_shell.src
                 }
                 else
                 {
-                    Console.WriteLine($"{command}: command not found");
+                    throw new Exception($"{command}: command not found");
+                    //Console.WriteLine($"{command}: command not found");
                 }
             }
         }
@@ -74,8 +75,9 @@ namespace codecrafters_shell.src
                     cd(arguments);
                     break;
                 default:
-                    Console.WriteLine($"{command}: command not found");
-                    break;   
+                    throw new Exception($"{command}: command not found");
+                    //Console.WriteLine($"{command}: command not found");
+                    //break;   
             }
         }
         static public void RunExecutableFile(string command, string[] arguments)
@@ -123,7 +125,8 @@ namespace codecrafters_shell.src
                 }
                 else
                 {
-                    Console.WriteLine($"{arguments[0]}: not found");
+                    throw new Exception($"{arguments[0]}: not found");
+                    //Console.WriteLine($"{arguments[0]}: not found");
                 }
             }
         }
@@ -140,7 +143,8 @@ namespace codecrafters_shell.src
             }
             catch (Exception)
             {
-                Console.WriteLine($"cd: {arguments[0]}: No such file or directory");
+                throw new Exception($"cd: {arguments[0]}: No such file or directory");
+                //Console.WriteLine($"cd: {arguments[0]}: No such file or directory");
             }
         }
         static private bool IsBuiltInShellCommand(string command)

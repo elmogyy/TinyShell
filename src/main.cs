@@ -12,8 +12,47 @@ while (true) {
     string? commandLine = Console.ReadLine();
     string command;
     string[] arguments;
-    Parser.Parse(commandLine, out command, out arguments);
-    CommandHandler.RunShellOrExecutable(command, arguments);
+    string outputDestination = "";
+    string errorDestination = "";
+    try
+    {
+        Parser.Parse(commandLine, out command, out arguments, ref outputDestination, ref errorDestination);
+        if (!string.IsNullOrEmpty(command))
+        {
+            if (!string.IsNullOrEmpty(outputDestination))
+            {
+                TextWriter originalConsole = Console.Out; 
+                using (StreamWriter writer = new StreamWriter(outputDestination , append : true))
+                {
+                    try
+                    {
+                        Console.SetOut(writer);
+                        CommandHandler.RunShellOrExecutable(command, arguments);
+                    }
+                    finally
+                    {
+                        Console.SetOut(originalConsole);
+                    }
+                }                
+            }
+            else
+            {
+                CommandHandler.RunShellOrExecutable(command, arguments);
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        if (!string.IsNullOrEmpty(errorDestination))
+        {
+            File.AppendAllText(errorDestination, $"{ex.Message}{Environment.NewLine}");
+        }
+        else
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+   
 
 
 
