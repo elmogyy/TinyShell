@@ -1,5 +1,6 @@
 using codecrafters_shell.src;
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 
@@ -19,7 +20,47 @@ while (true) {
         Parser.Parse(commandLine, out command, out arguments, ref outputDestination, ref errorDestination);
         if (!string.IsNullOrEmpty(command))
         {
-            if (!string.IsNullOrEmpty(outputDestination))
+            TextWriter originalOutput = Console.Out;
+            TextWriter originalError = Console.Error;
+            using (TextWriter output = string.IsNullOrEmpty(outputDestination) ? Console.Out : new StreamWriter(outputDestination, append: true))
+            using (TextWriter error = string.IsNullOrEmpty(errorDestination) ? Console.Error : new StreamWriter(errorDestination, append: true))
+            {
+                try
+                {
+                    Console.SetOut(output);
+                    Console.SetError(error);
+                    CommandHandler.RunShellOrExecutable(command, arguments);
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    Console.SetOut(originalOutput);
+                    Console.SetError(originalError);
+                }
+
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
+}
+            
+            
+
+
+
+
+
+
+
+
+
+                /*if (!string.IsNullOrEmpty(outputDestination))
             {
                 TextWriter originalConsole = Console.Out; 
                 using (StreamWriter writer = new StreamWriter(outputDestination , append : true))
@@ -38,8 +79,8 @@ while (true) {
             else
             {
                 CommandHandler.RunShellOrExecutable(command, arguments);
-            }
-        }
+            }*/
+  /*      }
     }
     catch (Exception ex)
     {
@@ -51,7 +92,7 @@ while (true) {
         {
             Console.WriteLine(ex.Message);
         }
-    }
+    }*/
    
 
 
@@ -97,4 +138,4 @@ while (true) {
      }
      Console.WriteLine($"{command}: command not found");*/
 
-}
+
