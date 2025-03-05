@@ -88,20 +88,14 @@ namespace codecrafters_shell.src
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
             process.StartInfo.UseShellExecute = false;
-            try
-            {
-                process.OutputDataReceived += (sender, e) => { if (e.Data != null) Console.WriteLine(e.Data); };
-                process.ErrorDataReceived += (sender, e) => { if (e.Data != null) Console.WriteLine(e.Data); };
-                process.Start();
-                //Console.WriteLine(process.StandardOutput.ReadToEnd());
-                process.BeginOutputReadLine();
-                process.BeginErrorReadLine();
-                process.WaitForExit();
-            }
-            catch(Exception ex)
-            {
-                throw new Exception();
-            }
+   
+            process.OutputDataReceived += (sender, e) => { if (e.Data != null) Console.WriteLine(e.Data); };
+            process.ErrorDataReceived += (sender, e) => { if (e.Data != null) Console.WriteLine(e.Data); };
+            process.Start();
+            //Console.WriteLine(process.StandardOutput.ReadToEnd());
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+            process.WaitForExit();
         }
         static private void exit(string[] arguments)
         {
