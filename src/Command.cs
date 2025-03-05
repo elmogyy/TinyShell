@@ -90,11 +90,11 @@ namespace codecrafters_shell.src
             process.StartInfo.UseShellExecute = false;
    
             process.OutputDataReceived += (sender, e) => { if (e.Data != null) Console.WriteLine(e.Data); };
-            process.ErrorDataReceived += (sender, e) => { if (e.Data != null) Console.Error.WriteLine(e.Data); };
+            //process.ErrorDataReceived += (sender, e) => { if (e.Data != null) Console.Error.WriteLine(e.Data); };
             process.Start();
             //Console.WriteLine(process.StandardOutput.ReadToEnd());
             process.BeginOutputReadLine();
-            process.BeginErrorReadLine();
+           // process.BeginErrorReadLine();
             process.WaitForExit();
         }
         static private void exit(string[] arguments)
