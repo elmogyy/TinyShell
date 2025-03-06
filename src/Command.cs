@@ -80,22 +80,44 @@ namespace codecrafters_shell.src
                     //break;   
             }
         }
-        static public void RunExecutableFile(string command, string[] arguments)
+        static public  void RunExecutableFile(string command, string[] arguments)
         {
-            Process process = new Process();
-            process.StartInfo.FileName = command;
-            process.StartInfo.Arguments = string.Join(" ", arguments.Select(argument => $"\"{argument.Replace("\"", "\\\"")}\""));
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.UseShellExecute = false;
-   
-            process.OutputDataReceived += (sender, e) => { if (e.Data != null) Console.WriteLine(e.Data); };
-            //process.ErrorDataReceived += (sender, e) => { if (e.Data != null) Console.Error.WriteLine(e.Data); };
-            process.Start();
-            //Console.WriteLine(process.StandardOutput.ReadToEnd());
-            process.BeginOutputReadLine();
-           // process.BeginErrorReadLine();
-            process.WaitForExit();
+            using (Process process = new Process())
+            {
+                process.StartInfo.FileName = command;
+                process.StartInfo.Arguments = string.Join(" ", arguments.Select(argument => $"\"{argument.Replace("\"", "\\\"")}\""));
+
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.CreateNoWindow = true;
+
+                process.OutputDataReceived += (sender, e) => { if (!string.IsNullOrWhiteSpace(e.Data)) Console.WriteLine(e.Data); };
+                process.ErrorDataReceived += (sender, e) => { if (!string.IsNullOrWhiteSpace(e.Data)) Console.Error.WriteLine(e.Data); };
+
+                try
+                {
+                    process.Start();
+                    //Console.WriteLine(process.StandardOutput.ReadToEnd());
+                    
+                    process.BeginOutputReadLine();
+                    process.BeginErrorReadLine();
+
+                    //string output = process.StandardOutput.ReadToEnd();
+
+                    process.WaitForExit();
+                    // string error = process.StandardError.ReadToEnd();
+                    //process.CancelOutputRead();
+                    //process.CancelErrorRead();
+                    //Console.WriteLine(output);
+                    //Console.Error.WriteLine(error);
+
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine("eeee");
+                }
+            }
         }
         static private void exit(string[] arguments)
         {

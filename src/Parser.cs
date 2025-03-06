@@ -128,22 +128,24 @@ namespace codecrafters_shell.src
                         if (i != commandLine.Length - 1)
                         {
                             char nextChar = commandLine[i + 1];
-                            if ((nextChar == '\\' || nextChar == '\'' || nextChar == '\"') && !inDoubleQuote)
+                            if ((nextChar == '\\' || nextChar == '\'' || nextChar == '\"' || nextChar == 'n') && !inDoubleQuote)
                             {
                                 currentArgument.Append(nextChar);
                                 i++;
+                                continue;
                             }
                             else if (nextChar == ' ' && !inDoubleQuote)
                             {
                                 currentArgument.Append(' ');
                                 i++;
+                                continue;
                             }
                             else if ((nextChar == '\\' || nextChar == '\"' || nextChar == '$') && inDoubleQuote)
                             {
                                 currentArgument.Append(nextChar);
                                 i++;
+                                continue;
                             }
-                            continue;
                         }
                         else
                         {
@@ -239,7 +241,11 @@ namespace codecrafters_shell.src
                 List<string> argumentsList = new List<string>();
                 while (!String.IsNullOrEmpty(commandLine))
                 {
-                    argumentsList.Add(ParseNextArgument(ref commandLine));
+                    string nextArgument = ParseNextArgument(ref commandLine);
+                    if (!string.IsNullOrEmpty(nextArgument))
+                    {
+                        argumentsList.Add(nextArgument);
+                    }
                 }
                 command = argumentsList[0];
                 arguments = argumentsList.Skip(1).ToArray();
