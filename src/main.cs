@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 
 while (true) {
     // Uncomment this line to pass the first stage
@@ -10,7 +11,35 @@ while (true) {
 
     // Wait for user input
     //Console.ReadLine();
-    string? commandLine = Console.ReadLine();
+    //string? commandLine = Console.ReadLine();
+    StringBuilder userInput = new StringBuilder();
+    bool running = true;
+    while (running)
+    {
+        ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+        switch (keyInfo.Key)
+        {
+            case ConsoleKey.Enter:
+                running = false;
+                Console.WriteLine();
+                break;
+            case ConsoleKey.Tab:
+                AutoCompleter.Complete(userInput);
+                break;
+            case ConsoleKey.Backspace:
+                if(userInput.Length != 0)
+                {
+                    userInput.Remove(userInput.Length - 1,1);
+                    Console.Write("\b \b");
+                }
+                break;
+            default:
+                userInput.Append(keyInfo.KeyChar);
+                Console.Write(keyInfo.KeyChar);
+                break;
+        }
+    }
+    string commandLine = userInput.ToString();
     string command;
     string[] arguments;
     string outputDestination = "";

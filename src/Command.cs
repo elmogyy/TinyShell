@@ -115,7 +115,7 @@ namespace codecrafters_shell.src
                 }
                 catch(Exception ex)
                 {
-                    Console.WriteLine("eeee");
+                    Console.WriteLine(ex.Message);
                 }
             }
         }
