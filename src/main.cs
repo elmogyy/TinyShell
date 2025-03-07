@@ -24,15 +24,18 @@ while (true) {
                 Console.WriteLine();
                 break;
             case ConsoleKey.Tab:
-                AutoCompleter.Complete(userInput);
-                if (userInput.Length == 0) running = false;
+                if (userInput.Length != 0)
+                {
+                    AutoCompleter.Complete(userInput);
+                }
                 break;
             case ConsoleKey.Backspace:
-                if(userInput.Length != 0)
+                if (userInput.Length != 0)
                 {
-                    userInput.Remove(userInput.Length - 1,1);
+                    userInput.Remove(userInput.Length - 1, 1);
                     Console.Write("\b \b");
                 }
+                else {Console.Write('\a'); }
                 break;
             default:
                 userInput.Append(keyInfo.KeyChar);
@@ -40,7 +43,6 @@ while (true) {
                 break;
         }
     }
-    if (userInput.Length == 0) continue;
     string commandLine = userInput.ToString();
     string command;
     string[] arguments;

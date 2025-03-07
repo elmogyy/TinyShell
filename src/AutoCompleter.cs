@@ -13,31 +13,27 @@ namespace codecrafters_shell.src
             switch (userInput.ToString())
             {
                 case "echo":
-                    userInput.Append(" ");
-                    Console.Write(" ");
+                    userInput.Append(' ');
+                    Console.Write(' ');
                     break;
                 case "ech":
                     userInput.Append("o ");
                     Console.Write("o ");
                     break;
                 case "exit":
-                    userInput.Append(" ");
-                    Console.Write(" ");
+                    userInput.Append(' ');
+                    Console.Write(' ');
                     break;
                 case "exi":
                     userInput.Append("t ");
                     Console.Write("t ");
-                    break;
-                case "type":
-                    userInput.Append(" ");
-                    Console.Write(" ");
                     break;
                 case "typ":
                     userInput.Append("e ");
                     Console.Write("e ");
                     break;
                 default:
-                    Console.Write("\a");
+                    Console.Write('\a');
                     break;
             }
         }
@@ -52,7 +48,7 @@ namespace codecrafters_shell.src
                 {
                     files.AddRange(Directory.GetFiles(path)
                         .Select(filePath => Path.GetFileName(filePath))
-                        .Where(fileName => fileName.StartsWith(userInput.ToString(), StringComparison.OrdinalIgnoreCase)).ToList());
+                        .Where(fileName => fileName.StartsWith(userInput.ToString())).ToList());
                     //files = Directory.GetFiles(path)
                        // .Select(filePath => Path.GetFileName(filePath))
                         //.Where(fileName => fileName.StartsWith(userInput.ToString(), StringComparison.OrdinalIgnoreCase)).ToList();
@@ -75,22 +71,30 @@ namespace codecrafters_shell.src
             }
             if (files.Count == 1)
             {
-                Console.Write("\u001b[3G");
+                for (int i = userInput.Length; i < files[0].Length; i++)
+                {
+                    Console.Write(files[0][i]);
+                    userInput.Append(files[0][i]);  
+                }
+                Console.Write(' ');
+                userInput.Append(' ');
+                /*Console.Write("\u001b[3G");
                 Console.Write(files[0] + " ");
                 userInput.Clear();
-                userInput.Append(files[0] + " ");
+                userInput.Append(files[0] + " ");*/
             }
             else if(files.Count > 1)
             {
+                files.Sort();
                 if (ConsoleKey.Tab == Console.ReadKey(true).Key)
                 {
-                    userInput.Clear();
                     Console.WriteLine();
                     foreach (string file in files)
                     {
                         Console.Write(file + "  ");
                     }
                     Console.WriteLine();
+                    Console.Write($"$ {userInput}");
                 }
             }
 
