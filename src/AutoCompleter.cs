@@ -41,9 +41,51 @@ namespace codecrafters_shell.src
                     break;
             }
         }
+        static public void ExecutableCompletion(StringBuilder userInput)
+        {
+            string? pathVariable = Environment.GetEnvironmentVariable("PATH");
+            string[] paths = pathVariable != null ? pathVariable.Split(':') : Array.Empty<string>();
+            List<string> files = new List<string>();
+            foreach (string path in paths)
+            {
+                if (Directory.Exists(path))
+                {
+                    files.AddRange(Directory.GetFiles(path)
+                        .Select(filePath => Path.GetFileName(filePath))
+                        .Where(fileName => fileName.StartsWith(userInput.ToString(), StringComparison.OrdinalIgnoreCase)).ToList());
+                    //files = Directory.GetFiles(path)
+                       // .Select(filePath => Path.GetFileName(filePath))
+                        //.Where(fileName => fileName.StartsWith(userInput.ToString(), StringComparison.OrdinalIgnoreCase)).ToList();
+
+                    
+
+                    /* string? executable = Directory.GetFiles(path).Select(filePath => Path.GetFileName(filePath))
+                 .FirstOrDefault(fileName => fileName.StartsWith(userInput.ToString(), StringComparison.OrdinalIgnoreCase));
+
+                     if (!string.IsNullOrEmpty(executable))
+                     {
+                         //Console.SetCursorPosition(2, Console.CursorTop);
+                         Console.Write("\u001b[3G");
+                         Console.Write(executable+" ");
+                         userInput.Clear();
+                         userInput.Append(executable);
+
+                     }*/
+                }
+            }
+            if (files.Count == 1)
+            {
+                Console.Write("\u001b[3G");
+                Console.Write(files[0] + " ");
+                userInput.Clear();
+                userInput.Append(files[0] + " ");
+            }
+
+        }
         static public void Complete(StringBuilder userInput)
         {
             BuiltinCompletion(userInput);
+            ExecutableCompletion(userInput);
         }
     }
 }
