@@ -80,6 +80,19 @@ namespace codecrafters_shell.src
                 userInput.Clear();
                 userInput.Append(files[0] + " ");
             }
+            else if(files.Count > 1)
+            {
+                if (ConsoleKey.Tab == Console.ReadKey(true).Key)
+                {
+                    userInput.Clear();
+                    Console.WriteLine();
+                    foreach (string file in files)
+                    {
+                        Console.Write(file + "  ");
+                    }
+                    Console.WriteLine();
+                }
+            }
 
         }
         static public void Complete(StringBuilder userInput)

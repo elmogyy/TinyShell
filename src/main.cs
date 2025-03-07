@@ -25,6 +25,7 @@ while (true) {
                 break;
             case ConsoleKey.Tab:
                 AutoCompleter.Complete(userInput);
+                if (userInput.Length == 0) running = false;
                 break;
             case ConsoleKey.Backspace:
                 if(userInput.Length != 0)
@@ -39,6 +40,7 @@ while (true) {
                 break;
         }
     }
+    if (userInput.Length == 0) continue;
     string commandLine = userInput.ToString();
     string command;
     string[] arguments;
