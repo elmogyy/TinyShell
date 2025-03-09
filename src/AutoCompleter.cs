@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace codecrafters_shell.src
 {
     static class AutoCompleter
     {
-        static private void BuiltinCompletion(StringBuilder userInput)
+        private static void BuiltinCompletion(StringBuilder userInput)
         {
             switch (userInput.ToString())
             {
@@ -37,16 +39,16 @@ namespace codecrafters_shell.src
                     break;
             }
         }
-        static public void ExecutableCompletion(StringBuilder userInput)
+        private static void ExecutableCompletion(StringBuilder userInput)
         {
             string? pathVariable = Environment.GetEnvironmentVariable("PATH");
-            string[] paths = pathVariable != null ? pathVariable.Split(':') : Array.Empty<string>();
-            List<string> files = new List<string>();
+            string[] paths = pathVariable != null ? pathVariable.Split(Path.PathSeparator) : Array.Empty<string>();
+            List<string> matches = new List<string>();
             foreach (string path in paths)
             {
                 if (Directory.Exists(path))
                 {
-                    files.AddRange(Directory.GetFiles(path)
+                    matches.AddRange(Directory.GetFiles(path)
                         .Select(filePath => Path.GetFileName(filePath))
                         .Where(fileName => fileName.StartsWith(userInput.ToString())).ToList());
                     //files = Directory.GetFiles(path)
@@ -69,37 +71,69 @@ namespace codecrafters_shell.src
                      }*/
                 }
             }
-            if (files.Count == 1)
+            matches = matches.Distinct().OrderBy(s => s).ToList();
+            if (matches.Count == 1)
             {
-                for (int i = userInput.Length; i < files[0].Length; i++)
-                {
-                    Console.Write(files[0][i]);
-                    userInput.Append(files[0][i]);  
-                }
+                CompleteInput(userInput, matches[0]);
                 Console.Write(' ');
                 userInput.Append(' ');
-                /*Console.Write("\u001b[3G");
-                Console.Write(files[0] + " ");
-                userInput.Clear();
-                userInput.Append(files[0] + " ");*/
             }
-            else if(files.Count > 1)
+            else if (matches.Count > 1)
             {
-                files.Sort();
-                if (ConsoleKey.Tab == Console.ReadKey(true).Key)
-                {
-                    Console.WriteLine();
-                    foreach (string file in files)
-                    {
-                        Console.Write(file + "  ");
-                    }
-                    Console.WriteLine();
-                    Console.Write($"$ {userInput}");
-                }
+                HandleMultipleMatches(userInput, matches);
             }
 
         }
-        static public void Complete(StringBuilder userInput)
+        private static void HandleMultipleMatches(StringBuilder userInput, List<string> matches)
+        {
+            string commonPrefix = GetLongestCommonPrefix(matches);
+            CompleteInput(userInput, commonPrefix);
+
+            ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+            if (keyInfo.Key == ConsoleKey.Tab)
+            {
+                Console.WriteLine();
+                PrintMatchingExecutables(matches);
+                Console.WriteLine();
+                Console.Write($"$ {userInput}");
+            }
+            else
+            {
+                Console.Write(keyInfo.KeyChar);
+                userInput.Append(keyInfo.KeyChar);
+            }
+        }
+        private static void PrintMatchingExecutables(List<string> matches)
+        {
+            if (matches.Count == 0) return;
+            foreach (string match in matches)
+            {
+                Console.Write(match + "  ");
+            }
+        }
+        private static void CompleteInput(StringBuilder userInput, string completion)
+        {
+            for (int i = userInput.Length; i < completion.Length; i++)
+            {
+                Console.Write(completion[i]);
+                userInput.Append(completion[i]);
+            }
+        }
+        private static string GetLongestCommonPrefix(List<string> matches)
+        {
+            if (matches.Count == 0) return "";
+
+            string prefix = matches[0];
+            foreach (string match in matches)
+            {
+                int i = 0;
+                while (i < prefix.Length && i < match.Length && prefix[i] == match[i]) i++;
+                prefix = prefix.Substring(0, i);
+            }
+            return prefix;
+        }
+
+        public static void Complete(StringBuilder userInput)
         {
             BuiltinCompletion(userInput);
             ExecutableCompletion(userInput);
