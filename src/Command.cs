@@ -37,7 +37,7 @@ namespace codecrafters_shell.src
     }*/
     static class CommandHandler
     {
-        static public void RunShellOrExecutable(string command, string[] arguments)
+        public static void RunShellOrExecutable(string command, string[] arguments)
         {
             
             if (IsBuiltInShellCommand(command)) { RunShellBuiltInCommand(command, arguments); }
@@ -55,7 +55,7 @@ namespace codecrafters_shell.src
                 }
             }
         }
-        static public void RunShellBuiltInCommand(string command, string[] arguments)
+        private static void RunShellBuiltInCommand(string command, string[] arguments)
         {
             switch (command)
             {
@@ -80,7 +80,7 @@ namespace codecrafters_shell.src
                     //break;   
             }
         }
-        static public  void RunExecutableFile(string command, string[] arguments)
+        private static void RunExecutableFile(string command, string[] arguments)
         {
             using (Process process = new Process())
             {
@@ -98,20 +98,9 @@ namespace codecrafters_shell.src
                 try
                 {
                     process.Start();
-                    //Console.WriteLine(process.StandardOutput.ReadToEnd());
-                    
                     process.BeginOutputReadLine();
                     process.BeginErrorReadLine();
-
-                    //string output = process.StandardOutput.ReadToEnd();
-
                     process.WaitForExit();
-                    // string error = process.StandardError.ReadToEnd();
-                    //process.CancelOutputRead();
-                    //process.CancelErrorRead();
-                    //Console.WriteLine(output);
-                    //Console.Error.WriteLine(error);
-
                 }
                 catch(Exception ex)
                 {
@@ -119,14 +108,14 @@ namespace codecrafters_shell.src
                 }
             }
         }
-        static private void exit(string[] arguments)
+        private static void exit(string[] arguments)
         {
             if (arguments[0] == "0")
             {
                 Environment.Exit(0);
             }
         }
-        static private void echo(string[] arguments)
+        private static void echo(string[] arguments)
         {
            for (int i = 0; i < arguments.Length; i++)
             {
@@ -141,7 +130,7 @@ namespace codecrafters_shell.src
             }
             Console.WriteLine();
         }
-        static private void type(string[] arguments)
+        private static void type(string[] arguments)
         {
             if (IsBuiltInShellCommand(arguments[0]))
             {
@@ -161,11 +150,11 @@ namespace codecrafters_shell.src
                 }
             }
         }
-        static private void pwd()
+        private static void pwd()
         {
             Console.WriteLine(Directory.GetCurrentDirectory());
         }
-        static private void cd(string[] arguments)
+        private static void cd(string[] arguments)
         {
             try
             {
@@ -178,11 +167,11 @@ namespace codecrafters_shell.src
                 //Console.WriteLine($"cd: {arguments[0]}: No such file or directory");
             }
         }
-        static private bool IsBuiltInShellCommand(string command)
+        private static bool IsBuiltInShellCommand(string command)
         {
            return Enum.IsDefined(typeof(CommandType), command);
         }
-        static private string GetExecutablePath(string command)
+        private static string GetExecutablePath(string command)
         {
             string? pathVariable = Environment.GetEnvironmentVariable("PATH");
             string[] paths = pathVariable != null ? pathVariable.Split(':') : Array.Empty<string>();

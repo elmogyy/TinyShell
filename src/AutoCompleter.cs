@@ -51,24 +51,6 @@ namespace codecrafters_shell.src
                     matches.AddRange(Directory.GetFiles(path)
                         .Select(filePath => Path.GetFileName(filePath))
                         .Where(fileName => fileName.StartsWith(userInput.ToString())).ToList());
-                    //files = Directory.GetFiles(path)
-                       // .Select(filePath => Path.GetFileName(filePath))
-                        //.Where(fileName => fileName.StartsWith(userInput.ToString(), StringComparison.OrdinalIgnoreCase)).ToList();
-
-                    
-
-                    /* string? executable = Directory.GetFiles(path).Select(filePath => Path.GetFileName(filePath))
-                 .FirstOrDefault(fileName => fileName.StartsWith(userInput.ToString(), StringComparison.OrdinalIgnoreCase));
-
-                     if (!string.IsNullOrEmpty(executable))
-                     {
-                         //Console.SetCursorPosition(2, Console.CursorTop);
-                         Console.Write("\u001b[3G");
-                         Console.Write(executable+" ");
-                         userInput.Clear();
-                         userInput.Append(executable);
-
-                     }*/
                 }
             }
             matches = matches.Distinct().OrderBy(s => s).ToList();

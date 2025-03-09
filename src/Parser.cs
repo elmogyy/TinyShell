@@ -9,7 +9,7 @@ namespace codecrafters_shell.src
 {
     static class Parser
     {
-        static private void HandleFileRedirection(string fileName, bool append)
+        private static void HandleFileRedirection(string fileName, bool append)
         {
 
             if (!File.Exists(fileName) || append == false)
@@ -18,36 +18,12 @@ namespace codecrafters_shell.src
                 //File.WriteAllText(fileName, "");
             }
         }
-       /* static private void HandleRedirection(List<string> argumentsList)
-        {
-            foreach (string argument in argumentsList)
-            {
-                if (argument == ">" || argument == "1>") HandleFileRedirection(argument+1, false);
-                else if(argument == ">>" || argument == "1>>") HandleFileRedirection(argument + 1, true);
-            }
-            HashSet<string> redirections = new HashSet<string> { ">", "1>", ">>", "1>>" };
-            argumentsList.RemoveAll(argument => redirections.Contains(argument));
-           // argumentsList.RemoveAll(argument => (argument == ">" || argument == "1>" || argument == ">>" || argument == "1>>"));
-
-        }*/
-        /*static private void ParseRedirectInNonQouteString(List<string> argumentsList)
-        {
-        }
-            static private void ParseRedirectString(List<string> argumentsList)
-        {
-            foreach (string argument in argumentsList)
-            {
-                if (argument.StartsWith('\"') || argument.StartsWith('\'')) continue;
-                argument = "dasf";
-                argumentsList.ins
-            }
-        }*/
         public enum RedirectType 
         {
             stdout = '1',
             stderr = '2'
         }
-        static private bool TryParseNextRedirect(ref string commandLine, out string fileName , out bool append, out RedirectType redirectType)
+        private static bool TryParseNextRedirect(ref string commandLine, out string fileName , out bool append, out RedirectType redirectType)
         {
             StringBuilder commandLineWithoutRedirect = new StringBuilder();
             bool inSingleQuote = false, inDoubleQuote = false;
@@ -84,26 +60,17 @@ namespace codecrafters_shell.src
                     {
                         redirectType = (RedirectType)commandLineWithoutRedirect[commandLineWithoutRedirect.Length - 1];
                         commandLineWithoutRedirect.Remove(commandLineWithoutRedirect.Length - 1, 1);
-
-                        //commandLineWithoutRedirect.Length--;
-
                     }
                     else if(commandLineWithoutRedirect.Length > 1 && commandLineWithoutRedirect[commandLineWithoutRedirect.Length - 2] == ' ' && (commandLineWithoutRedirect[commandLineWithoutRedirect.Length - 1] == '1' || commandLineWithoutRedirect[commandLineWithoutRedirect.Length - 1] == '2'))
                     {
                         redirectType = (RedirectType)commandLineWithoutRedirect[commandLineWithoutRedirect.Length - 1];
                         commandLineWithoutRedirect.Remove(commandLineWithoutRedirect.Length - 1, 1);
-
-                       // commandLineWithoutRedirect.Length--;
                     }
                     else
                     {
                         redirectType = RedirectType.stdout;
                     }
-                    //Console.WriteLine(fileName);
-                    //Console.WriteLine(append);
-                    //Console.WriteLine(redirectType);
                     commandLine = commandLineWithoutRedirect.ToString()+ " " + commandLine;
-                   // Console.WriteLine(commandLine);
                     return true;
                 }
                 commandLineWithoutRedirect.Append(currentChar);
@@ -114,7 +81,7 @@ namespace codecrafters_shell.src
             return false;
         }
 
-        static private string ParseNextArgument(ref string commandLine)
+        private static string ParseNextArgument(ref string commandLine)
         {
             StringBuilder currentArgument = new StringBuilder();
             bool inSingleQuote = false, inDoubleQuote = false;
@@ -153,32 +120,17 @@ namespace codecrafters_shell.src
                         }
                     }
 
-                   /* else if (currentChar == ' ' && nextChar == '>' && !inDoubleQuote)
-                    {
-                        currentArgument.Append(' ');
-                        currentArgument.Append('>');
-                        i++;
-                    }*/
                     else if (currentChar == '"' && !inSingleQuote)
                     {
                             inDoubleQuote = !inDoubleQuote;
                             continue;
                     }
+
                     else if (currentChar == '\'' && !inDoubleQuote)
                     {
                         inSingleQuote = !inSingleQuote;
                         continue;
                     }
-                    /*else if (currentChar == '>' && !inSingleQuote && !inDoubleQuote)
-                    {
-                        inRedirect = true;
-                        string redirectString = argumentString.Substring(i);
-                        ParseRedirectString(redirectString);
-
-
-
-                    }*/
-
 
                     else if ((currentChar == ' ' ) && !inSingleQuote && !inDoubleQuote)
                     {
@@ -206,6 +158,7 @@ namespace codecrafters_shell.src
                 command = string.Empty;
                 arguments = Array.Empty<string>();
             }
+
             else
             {
                 commandLine = commandLine.Trim();
@@ -227,17 +180,7 @@ namespace codecrafters_shell.src
                         HandleFileRedirection(fileName, append);
                     }
                 }
-               /* do
-                {
-                   RedirectType? redirectType = null;
-                   bool? append = null;
-                   bool isNextRedirectValid = TryParseNextRedirect(ref commandLine,ref append, ref redirectType);
-                   if(nextRedirect != "")
-                   {
-                        HandleFileRedirection(nextRedirect, append);
-                   }
-                    
-                } while (!string.IsNullOrEmpty(redirect));*/
+
                 List<string> argumentsList = new List<string>();
                 while (!String.IsNullOrEmpty(commandLine))
                 {
@@ -249,13 +192,6 @@ namespace codecrafters_shell.src
                 }
                 command = argumentsList[0];
                 arguments = argumentsList.Skip(1).ToArray();
-
-                /*List<string> argumentsList = ParseArgumentString(commandLine);
-                HandleRedirection(argumentsList);
-                arguments = argumentsList.ToArray();
-               
-                arguments = arguments.Skip(1).ToArray();*/
-
             }       
         }
     }
